@@ -91,8 +91,10 @@ export function Scheduling() {
     setRentalPeriod({
       start: start.timestamp,
       end: end.timestamp,
-      //prettier-ignore
-      startFormatted: format(getPlatformDate(new Date(firstDate)),'dd/MM/yyyy'),
+      startFormatted: format(
+        getPlatformDate(new Date(firstDate)),
+        'dd/MM/yyyy'
+      ),
       endFormatted: format(getPlatformDate(new Date(lastDate)), 'dd/MM/yyyy'),
     });
   }
@@ -131,7 +133,11 @@ export function Scheduling() {
         <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
       </Content>
       <Footer>
-        <Button title='Confirmar' onPress={handleConfirmRental} />
+        <Button
+          title='Confirmar'
+          disabled={!!!rentalPeriod.endFormatted}
+          onPress={handleConfirmRental}
+        />
       </Footer>
     </Container>
   );

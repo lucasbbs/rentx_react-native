@@ -1,7 +1,6 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
-import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';

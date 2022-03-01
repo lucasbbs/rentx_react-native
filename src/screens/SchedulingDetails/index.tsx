@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Alert, StatusBar } from 'react-native';
@@ -55,6 +55,7 @@ interface Params {
 }
 
 export function SchedulingDetails() {
+  const [loading, setLoading] = useState(false);
   const route = useRoute();
   const {
     dates,
@@ -76,6 +77,7 @@ export function SchedulingDetails() {
   const navigation = useNavigation();
 
   async function handleConfirmRental() {
+    setLoading(true);
     const { data } = await api.get(`/schedules_bycars/${id}`);
 
     const unavailable_dates = [...data.unavailable_dates, ...dates];
@@ -98,8 +100,14 @@ export function SchedulingDetails() {
       });
 
       await api.put(`/schedules_bycars/${id}`, { id, unavailable_dates });
-      navigation.navigate('SchedulingComplete');
+      navigation.navigate('Confirmation', {
+        nextScreenRoute: 'Home',
+        title: 'Carro Alugado!',
+        message:
+          'Agora você só precisa ir\naté a concessionária da RENTX\ne pegar o seu automóvel',
+      });
     } catch (error) {
+      setLoading(false);
       Alert.alert('Não foi possível confirmar o agendamento');
     }
   }
@@ -178,6 +186,8 @@ export function SchedulingDetails() {
       <Footer>
         <Button
           title='Alugar agora'
+          loading={loading}
+          disabled={loading}
           color={theme.colors.success}
           onPress={handleConfirmRental}
         />
